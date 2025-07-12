@@ -1,36 +1,146 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 ProfNITT Admin Panel
 
-## Getting Started
+A modern, secure, and scalable **Admin Panel** built using **Next.js App Router**, **TypeScript**, **MongoDB Atlas**, and **NextAuth**.  
+Designed for the ProfNITT website, this dashboard allows authorized users to manage **Events**, **Projects**, **Team Members**, and **Gallery** content in a clean, role-based interface.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🌟 Core Functional Requirements
+
+### 🔐 Authentication System
+- ✅ Secure login system using NextAuth Credentials Provider
+- ✅ Password validation with bcryptjs
+- ✅ JWT-based session management
+
+### 🧭 Dashboard Functionalities
+
+#### 📅 Events Management
+- ➕ Add Event: `title`, `description`, `date`, `venue`, `tags`, `image (optional)`
+- ✏️ Update Event: Edit all event fields
+- ❌ Remove Event: Delete any existing event
+
+#### 💼 Projects Management
+- ➕ Add Project: `title`, `description`, `tech used`, `status`, `GitHub/demo links`
+- ✏️ Update Project: Modify any project data
+- ❌ Remove Project: Clean project deletion
+
+#### 👥 Team Members Management
+- ➕ Add Member: `name`, `role`, `type`, `photo`, `bio`, `LinkedIn`
+- ✏️ Update Member: Change roles/designation
+- ❌ Remove Member: Delete from the team
+
+#### 🖼 Gallery Management
+- ➕ Add Image: Upload with `tags/captions`
+- ✏️ Update Image: Replace or update metadata
+- ❌ Remove Image: Delete permanently
+
+---
+
+## 🧠 Guidelines & Expectations
+
+### 🎨 UI/UX
+- Clean, responsive & elegant layout
+- Theme aligned with ProfNITT branding
+- Bonus: login history, interactive animations, graphs/stats
+
+### 🛠 Tech Stack
+- **Frontend**: Next.js (App Router) + Tailwind CSS (Planned)
+- **Backend**: App Router APIs
+- **Database**: MongoDB Atlas via Mongoose
+- **Authentication**: NextAuth with JWT
+- **Language**: TypeScript
+
+### 📦 Modularity & Scalability
+- Clean folder structure
+- Reusable components and hooks
+- Centralized auth guard
+- Future-proof database models
+
+---
+
+## 🗂 Folder Structure
+
+```
+.
+├── app/                      # App Router pages and API handlers
+│   ├── login/               # Login screen
+│   ├── admin/               # Protected dashboard routes
+│   └── api/auth/[...nextauth]/route.ts
+├── lib/                     
+│   ├── mongodb.ts           # MongoDB connection logic
+│   └── authGuard.ts         # Central SSR auth validator
+├── models/
+│   ├── User.ts              # Mongoose User schema
+│   ├── Event.ts             # Event schema (planned)
+│   ├── Project.ts           # Project schema (planned)
+│   └── Member.ts            # Team member schema (planned)
+├── types/
+│   └── next-auth.d.ts       # NextAuth type extensions
+├── public/                  # Static assets
+├── .env.local               # Sensitive config (not committed)
+└── README.md                # You're reading this 😉
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔐 Authentication Flow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Visit a protected route like `/admin`
+2. If not logged in → redirect to `/login?callbackUrl=/admin`
+3. On successful login → redirect back to the original route
 
-## Learn More
+Sessions are JWT-based and stored securely in memory.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌱 Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create a `.env.local` file at the root with the following:
 
-## Deploy on Vercel
+```
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/profnitt
+NEXTAUTH_SECRET=super-secret-value
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🧪 Running the Project Locally
+
+```bash
+git clone <repo-url>
+cd profnitt-admin-panel
+npm install
+touch .env.local      # Add Mongo URI and secret here
+npm run dev
+```
+
+Visit `http://localhost:3000` 🚀
+
+---
+
+## 🧭 Features in Progress
+
+| Feature            | Status     |
+|-------------------|------------|
+| Auth/Login         | ✅ Done
+| Central Auth Guard | ✅ Done
+| Add Events         | ✅ Done
+| Add Projects       | ✅ Done
+| Add Team Members   | ✅ Done
+| Upload Gallery     | ✅ Done
+| Responsive UI      | ✅ Done
+| Dashboard Stats    | ✅ Done
+
+---
+
+## 💡 Developer Notes
+
+- Built for long-term maintainability
+- All auth logic is centralized via `withAuth()`
+- Leverages modern App Router design patterns
+
+---
+
+## 📄 License
+
+MIT © ProfNITT Developers
