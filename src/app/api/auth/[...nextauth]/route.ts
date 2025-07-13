@@ -1,7 +1,7 @@
 import NextAuth from "next-auth/next"
 import Credentials from "next-auth/providers/credentials"
 import { connectDB } from "@/lib/mongodb"
-import { User } from "@/models/User"
+import { Admin } from "@/models/Admin"
 import { compare } from "bcryptjs"
 import type { NextAuthOptions } from "next-auth"
 
@@ -15,9 +15,10 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         await connectDB()
-        const user = await User.findOne({ email: credentials?.email })
 
+        const user = await Admin.findOne({ email: credentials?.email })
         if (!user) throw new Error("No user found with this email.")
+
         const isValid = await compare(credentials!.password, user.password)
         if (!isValid) throw new Error("Invalid password.")
 
@@ -25,6 +26,7 @@ export const authOptions: NextAuthOptions = {
           id: user._id.toString(),
           email: user.email,
           role: user.role,
+          name: user.name
         }
       },
     }),
@@ -33,15 +35,22 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user && typeof user === "object" && "role" in user) {
         token.role = user.role
+        if ("name" in user) token.name = user.name
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.role = token.role as string
+        session.user.name = token.name as string
       }
       return session
     },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      if (url.startsWith(baseUrl)) return url
+      return baseUrl
+    }
   },
   pages: {
     signIn: "/login",
