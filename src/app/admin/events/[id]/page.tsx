@@ -2,17 +2,18 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { getEvent, updateEvent } from "@/utils/api/events"
 import { EventData } from "@/types"
-import toast from "react-hot-toast"
+import { getEvent } from "@/utils/api/events"
+import { toast } from "react-hot-toast"
 import Link from "next/link"
+import Image from "next/image"
+import { motion } from "framer-motion"
 
-export default function EditEventPage() {
+export default function ViewEventPage() {
     const { id } = useParams() as { id: string }
     const router = useRouter()
 
-    const [formData, setFormData] = useState<EventData | null>(null)
-    const [tagInput, setTagInput] = useState("")
+    const [event, setEvent] = useState<EventData | null>(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -21,159 +22,97 @@ export default function EditEventPage() {
 
     const fetchEvent = async () => {
         try {
-            const event = await getEvent(id)
-            setFormData(event)
-        } catch  {
+            const data = await getEvent(id)
+            setEvent(data)
+        } catch {
             toast.error("Failed to load event")
+            router.push("/admin/events")
         } finally {
             setLoading(false)
         }
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (!formData) return
-        setFormData({ ...formData, [e.target.name]: e.target.value })
-    }
-
-    const handleAddTag = () => {
-        if (!formData) return
-        const tag = tagInput.trim()
-        if (tag && !formData.tags.includes(tag)) {
-            setFormData({ ...formData, tags: [...formData.tags, tag] })
-            setTagInput("")
-        }
-    }
-
-    const handleRemoveTag = (tagToRemove: string) => {
-        if (!formData) return
-        setFormData({
-            ...formData,
-            tags: formData.tags.filter(tag => tag !== tagToRemove)
-        })
-    }
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!formData) return
-
-        try {
-            await updateEvent(id, formData)
-            toast.success("Event updated successfully")
-            router.push("/admin/events")
-        } catch {
-            toast.error("Failed to update event")
-        }
-    }
-
-    if (loading) return <div className="p-6">Loading...</div>
-    if (!formData) return <div className="p-6 text-red-500">Event not found</div>
+    if (loading) return <p className="text-indigo-300 animate-pulse p-10">Loading event details...</p>
+    if (!event) return null
 
     return (
-        <div className="max-w-3xl mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-6">Edit Event</h1>
-            <form onSubmit={handleSubmit} className="space-y-5 bg-white p-6 shadow rounded">
-                <div>
-                    <label className="block font-medium mb-1">Title</label>
-                    <input
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded"
-                        required
-                    />
-                </div>
+        <div className="min-h-screen px-6 py-16 max-w-4xl mx-auto text-gray-100">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-gray-900 bg-opacity-40 backdrop-blur-md rounded-3xl p-12 shadow-lg"
+            >
+                <h1 className="text-4xl font-semibold mb-6 text-indigo-400 select-none">{event.title}</h1>
 
-                <div>
-                    <label className="block font-medium mb-1">Description</label>
-                    <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded"
-                        rows={4}
-                    />
-                </div>
-
-                <div>
-                    <label className="block font-medium mb-1">Date</label>
-                    <input
-                        type="date"
-                        name="date"
-                        value={formData.date?.slice(0, 10)}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label className="block font-medium mb-1">Venue</label>
-                    <input
-                        name="venue"
-                        value={formData.venue}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label className="block font-medium mb-1">Tags</label>
-                    <div className="flex gap-2">
-                        <input
-                            type="text"
-                            value={tagInput}
-                            onChange={(e) => setTagInput(e.target.value)}
-                            className="flex-grow border px-3 py-2 rounded"
-                            placeholder="Enter tag"
+                {event.imageUrl && (
+                    <div className="relative w-full h-64 mb-8 rounded-lg overflow-hidden border border-indigo-700 shadow-md">
+                        <Image
+                            src={event.imageUrl}
+                            alt={`${event.title} Image`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 600px"
+                            style={{ objectFit: 'cover' }}
+                            priority={false}
                         />
-                        <button
-                            type="button"
-                            onClick={handleAddTag}
-                            className="px-4 py-2 bg-gray-700 text-white rounded"
-                        >
-                            Add
-                        </button>
                     </div>
-                    <div className="flex flex-wrap mt-2 gap-2">
-                        {formData.tags.map(tag => (
-                            <span
-                                key={tag}
-                                className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm flex items-center gap-1"
-                            >
-                                {tag}
-                                <button
-                                    type="button"
-                                    onClick={() => handleRemoveTag(tag)}
-                                    className="text-red-500 ml-1 font-bold"
-                                >
-                                    ×
-                                </button>
-                            </span>
-                        ))}
-                    </div>
+                )}
+
+                <div className="space-y-4 text-gray-300">
+                    <p>
+                        <span className="font-semibold text-indigo-400">Type:</span> {event.eventType || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-semibold text-indigo-400">Date:</span>{" "}
+                        {new Date(event.date).toLocaleDateString(undefined, {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                        })}
+                    </p>
+                    <p>
+                        <span className="font-semibold text-indigo-400">Venue:</span> {event.venue || "N/A"}
+                    </p>
+                    {event.description && (
+                        <div>
+                            <span className="font-semibold text-indigo-400">Description:</span>
+                            <p className="mt-1 whitespace-pre-wrap">{event.description}</p>
+                        </div>
+                    )}
+
+                    {event.tags && event.tags.length > 0 && (
+                        <div>
+                            <span className="font-semibold text-indigo-400">Tags:</span>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                                {event.tags.map((tag) => (
+                                    <span
+                                        key={tag}
+                                        className="bg-indigo-800 border border-indigo-700 text-indigo-300 px-3 py-1 rounded-full text-sm font-medium select-none shadow-sm"
+                                    >
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                <div>
-                    <label className="block font-medium mb-1">Image URL</label>
-                    <input
-                        name="imageUrl"
-                        value={formData.imageUrl || ""}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded"
-                    />
-                </div>
-
-                <div className="flex justify-between mt-6">
-                    <Link href="/admin/events" className="text-gray-500 underline">Cancel</Link>
-                    <button
-                        type="submit"
-                        className="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                <div className="mt-12 flex justify-between">
+                    <Link
+                        href="/admin/events"
+                        className="text-indigo-400 hover:text-indigo-300 underline text-sm select-none"
                     >
-                        Update Event
-                    </button>
+                        ← Back to Events
+                    </Link>
+                    <Link
+                        href={`/admin/events/edit/${id}`}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md transition-transform active:scale-95"
+                    >
+                        Edit Event
+                    </Link>
                 </div>
-            </form>
+            </motion.div>
         </div>
     )
 }

@@ -21,7 +21,7 @@ const dashboardLinks = [
     {
         title: 'Projects',
         description: 'Add, update, or remove projects',
-        href: '/admin/project',
+        href: '/admin/projects',
         icon: FileText,
         color: 'from-blue-500 to-sky-600',
     },

@@ -1,6 +1,6 @@
 export async function uploadImageToCloudinary(file: File): Promise<string> {
-    const cloudName = "YOUR_CLOUD_NAME"
-    const uploadPreset = "YOUR_UNSIGNED_UPLOAD_PRESET"
+    const cloudName = "dz31stmeh"
+    const uploadPreset = "profnitt_uploads" 
 
     const formData = new FormData()
     formData.append("file", file)
@@ -11,7 +11,11 @@ export async function uploadImageToCloudinary(file: File): Promise<string> {
         body: formData,
     })
 
-    if (!res.ok) throw new Error("Image upload failed")
+    if (!res.ok) {
+        const error = await res.json()
+        console.error("Cloudinary Error:", error)
+        throw new Error("Image upload failed")
+    }
 
     const data = await res.json()
     return data.secure_url as string

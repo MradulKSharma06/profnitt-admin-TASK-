@@ -11,6 +11,7 @@ const EventSchema = new Schema({
     views: { type: Number, default: 0 },
     edits: { type: Number, default: 0 },
     deletions: { type: Number, default: 0 },
+    eventType: String
 }, { timestamps: true })
 
 export default mongoose.models.Event || mongoose.model('Event', EventSchema)

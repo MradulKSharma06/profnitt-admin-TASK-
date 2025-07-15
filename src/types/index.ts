@@ -1,4 +1,3 @@
-// types/index.ts
 
 // -------------------- Event --------------------
 export interface EventData {
