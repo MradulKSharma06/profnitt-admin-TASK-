@@ -138,7 +138,7 @@ export default function Hero() {
             <hr className="border-white/10 my-12 mx-auto w-[60%]" />
 
             {/* ABOUT US */}
-            <section className="relative mt-10 z-10 px-4 md:px-0">
+            <section className="relative mt-10 z-10 px-4 md:px-0 mb-20">
                 <div className="absolute h-[550px] w-[550px] rounded-full bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-indigo-900 to-[#010725] bottom-[40%] right-[60%] z-0 blur-[150px]" />
                 <div className="max-w-3xl mx-auto z-10 relative">
                     <div className="p-6 text-center border border-gray-600 rounded-[10px] backdrop-blur-sm bg-white/5">

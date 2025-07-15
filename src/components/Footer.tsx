@@ -4,7 +4,7 @@ import { Mail, Linkedin, Github } from 'lucide-react'
 
 export default function Footer() {
     return (
-        <footer className="w-full bg-[#080b2d] border-t border-gray-700 text-white py-10 px-6 mt-20">
+        <footer className="w-full bg-[#080b2d] border-t border-gray-700 text-white py-10 px-6">
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-10">
                 {/* Left Side: Logo and Club Description */}
                 <div className="flex flex-col space-y-3 max-w-md">

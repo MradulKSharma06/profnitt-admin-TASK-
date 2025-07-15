@@ -2,14 +2,9 @@
 
 import React from 'react'
 import DashboardChart from './DashboardChart'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className="min-h-screen bg-[#0a0c2a] text-white flex flex-col">
-            {/* Global Navbar */}
-            <Navbar />
 
             {/* Content Section: Sidebar + Main */}
             <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
@@ -51,9 +46,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     </div>
                 </main>
             </div>
-
-            {/* Global Footer */}
-            <Footer />
         </div>
     )
 }

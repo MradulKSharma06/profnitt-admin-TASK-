@@ -7,6 +7,9 @@ import {
 } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers' 
+import { Toaster } from 'react-hot-toast'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
 // Load fonts
 const quicksand = Quicksand({
@@ -58,7 +61,13 @@ export default function RootLayout({
     >
       <body className="bg-background text-foreground font-sans min-h-screen antialiased">
         <Providers>
+          <Toaster
+            position="top-right"
+            reverseOrder={false}
+          />
+          <Navbar />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>

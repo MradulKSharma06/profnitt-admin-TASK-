@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, XCircle, AlertCircle } from 'lucide-react'
 
@@ -126,7 +126,6 @@ export default function SignupPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#0c1026] to-[#1e293b] px-4">
-            <Toaster position="top-right" />
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
