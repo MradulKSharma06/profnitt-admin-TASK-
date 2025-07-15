@@ -3,13 +3,11 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ProjectData } from '@/types'
-import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 export default function ProjectListPage() {
   const [projects, setProjects] = useState<ProjectData[]>([])
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
     fetchProjects()

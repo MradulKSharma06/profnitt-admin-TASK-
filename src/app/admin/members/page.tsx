@@ -7,12 +7,10 @@ import { getMembers, deleteMember } from "@/utils/api/members"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import toast from "react-hot-toast"
-import { useRouter } from "next/navigation"
 
 export default function MembersPage() {
     const [members, setMembers] = useState<MemberData[]>([])
     const [loading, setLoading] = useState(true)
-    const router = useRouter()
 
     useEffect(() => {
         async function fetchMembers() {
@@ -36,7 +34,7 @@ export default function MembersPage() {
             await deleteMember(id)
             toast.success("Member deleted")
             setMembers(prev => prev.filter(m => m._id !== id))
-        } catch (err) {
+        } catch  {
             toast.error("Failed to delete member")
         }
     }

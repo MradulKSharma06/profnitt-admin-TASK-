@@ -53,7 +53,7 @@ export interface MemberData {
 // -------------------- Gallery --------------------
 export interface GalleryImage {
     _id?: string
-    imageUrl: string
+    imageUrls: string[]             
     tags?: string[]
     caption?: string
     uploadedBy?: string
@@ -62,6 +62,7 @@ export interface GalleryImage {
     views?: number
     edits?: number
     deletions?: number
+    title:string
 }
 
 // -------------------- Action Log --------------------
