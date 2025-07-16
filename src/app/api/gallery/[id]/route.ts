@@ -17,7 +17,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
         }
 
         const image = await Gallery.findById(params.id)
-        if (!image) return new NextResponse("Image not found", { status: 404 })
+        if (!image) return new NextResponse("Gallery image not found", { status: 404 })
 
         await ActionLog.create({
             action: "view",
@@ -45,7 +45,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
         const body = await req.json()
         const updated = await Gallery.findByIdAndUpdate(params.id, body, { new: true })
-        if (!updated) return new NextResponse("Image not found", { status: 404 })
+
+        if (!updated) return new NextResponse("Gallery image not found", { status: 404 })
 
         await ActionLog.create({
             action: "update",
@@ -72,7 +73,7 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
         }
 
         const deleted = await Gallery.findByIdAndDelete(params.id)
-        if (!deleted) return new NextResponse("Image not found", { status: 404 })
+        if (!deleted) return new NextResponse("Gallery image not found", { status: 404 })
 
         await ActionLog.create({
             action: "delete",
