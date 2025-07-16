@@ -3,20 +3,21 @@ import Event from "@/models/Event"
 import ActionLog from "@/models/ActionLog"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
-import { NextResponse } from "next/server"
+import { NextResponse, NextRequest } from "next/server"
 import mongoose from "mongoose"
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, context: { params: { id: string } }) {
     try {
         await connectDB()
         const session = await getServerSession(authOptions)
         const performedBy = session?.user?.name || "unknown"
 
-        if (!mongoose.Types.ObjectId.isValid(params.id)) {
+        const { id } = context.params
+        if (!mongoose.Types.ObjectId.isValid(id)) {
             return new NextResponse("Invalid Event ID", { status: 400 })
         }
 
-        const event = await Event.findById(params.id)
+        const event = await Event.findById(id)
         if (!event) return new NextResponse("Event not found", { status: 404 })
 
         await ActionLog.create({
@@ -33,19 +34,19 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
     try {
         await connectDB()
         const session = await getServerSession(authOptions)
         const performedBy = session?.user?.name || "unknown"
 
-        if (!mongoose.Types.ObjectId.isValid(params.id)) {
+        const { id } = context.params
+        if (!mongoose.Types.ObjectId.isValid(id)) {
             return new NextResponse("Invalid Event ID", { status: 400 })
         }
 
         const data = await req.json()
-        const updated = await Event.findByIdAndUpdate(params.id, data, { new: true })
-
+        const updated = await Event.findByIdAndUpdate(id, data, { new: true })
         if (!updated) return new NextResponse("Event not found", { status: 404 })
 
         await ActionLog.create({
@@ -62,17 +63,18 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
     try {
         await connectDB()
         const session = await getServerSession(authOptions)
         const performedBy = session?.user?.name || "unknown"
 
-        if (!mongoose.Types.ObjectId.isValid(params.id)) {
+        const { id } = context.params
+        if (!mongoose.Types.ObjectId.isValid(id)) {
             return new NextResponse("Invalid Event ID", { status: 400 })
         }
 
-        const deleted = await Event.findByIdAndDelete(params.id)
+        const deleted = await Event.findByIdAndDelete(id)
         if (!deleted) return new NextResponse("Event not found", { status: 404 })
 
         await ActionLog.create({
