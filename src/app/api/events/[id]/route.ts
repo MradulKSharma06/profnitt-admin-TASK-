@@ -1,15 +1,15 @@
 import { connectDB } from "@/lib/mongodb"
 import Event from "@/models/Event"
 import ActionLog from "@/models/ActionLog"
-import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
-import { NextResponse, NextRequest } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import mongoose from "mongoose"
 
 export async function GET(req: NextRequest, context: { params: { id: string } }) {
     try {
         await connectDB()
-        const session = await getServerSession(authOptions)
+        const session = await getServerSession({ req, ...authOptions })
         const performedBy = session?.user?.name || "unknown"
 
         const { id } = context.params
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest, context: { params: { id: string } })
 export async function PUT(req: NextRequest, context: { params: { id: string } }) {
     try {
         await connectDB()
-        const session = await getServerSession(authOptions)
+        const session = await getServerSession({ req, ...authOptions })
         const performedBy = session?.user?.name || "unknown"
 
         const { id } = context.params
@@ -66,7 +66,7 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
 export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
     try {
         await connectDB()
-        const session = await getServerSession(authOptions)
+        const session = await getServerSession({ req, ...authOptions })
         const performedBy = session?.user?.name || "unknown"
 
         const { id } = context.params
